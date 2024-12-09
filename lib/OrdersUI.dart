@@ -1,6 +1,6 @@
-import 'package:ecom_app/data/DataModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'bloc/orders_bloc/order_bloc.dart';
 import 'bloc/orders_bloc/order_event.dart';
 import 'bloc/orders_bloc/order_state.dart';
@@ -18,26 +18,42 @@ class _OrdersUIState extends State<OrdersUI> {
   @override
   void initState() {
     super.initState();
-    _isExpanded = []; // Initialize expansion state
+    _isExpanded = [];
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Await the token from SharedPreferences
       token = await UserSession().getTokenFromPrefs();
       if (token != null) {
-        // Dispatch the event with the token
         context.read<OrderBloc>().add(LoadOrdersEvent(token: token!));
       } else {
-        // Handle the case where the token is null (e.g., show an error or redirect)
         print("Error: Token not found");
       }
     });
   }
+
+  String _formatDate(String? date) {
+    if (date == null || date.isEmpty) return "Invalid Date";
+
+    try {
+      // Parse the date from the string
+      final parsedDate = DateTime.parse(date);
+
+      // Format the date in dd-MM-yy format
+      final formattedDate = DateFormat('dd-MM-yy').format(parsedDate);
+
+      return formattedDate;
+    } catch (e) {
+      // Handle any parsing errors
+      return "Invalid Date";
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("My Orders"),
+        automaticallyImplyLeading: true,
       ),
       body: BlocBuilder<OrderBloc, OrderState>(
         builder: (context, state) {
@@ -53,60 +69,68 @@ class _OrdersUIState extends State<OrdersUI> {
             }
 
             return SingleChildScrollView(
-              child: Column(
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: orders.length,
-                    itemBuilder: (context, index) {
-                      final order = orders[index];
-                      return Card(
-                        elevation: 2,
-                        margin: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: ExpansionPanelList(
-                          elevation: 1,
-                          expandedHeaderPadding: EdgeInsets.symmetric(vertical: 4.0),
-                          expansionCallback: (int panelIndex, bool isExpanded) {
-                            setState(() {
-                              _isExpanded[index] = !_isExpanded[index];
-                            });
-                          },
-                          children: [
-                            ExpansionPanel(
-                              headerBuilder: (BuildContext context, bool isExpanded) {
-                                return ListTile(
-                                  title: Text(
-                                    "Order #${order.orderNumber}",
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  subtitle: Text("Total: ₹${order.totalAmount}"),
-                                );
-                              },
-                              body: Column(
-                                children: order.product!.map((product) {
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: orders.length,
+                      itemBuilder: (context, index) {
+                        final order = orders[index];
+                        return Card(
+                          elevation: 0,
+                          color: Colors.white,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: ExpansionPanelList(
+                            elevation: 1,
+                            expandedHeaderPadding: EdgeInsets.symmetric(vertical: 4.0),
+                            expansionCallback: (int panelIndex, bool isExpanded) {
+                              setState(() {
+                                _isExpanded[index] = !_isExpanded[index];
+                              });
+                            },
+                            children: [
+                              ExpansionPanel(
+                                headerBuilder: (BuildContext context, bool isExpanded) {
                                   return ListTile(
-                                    leading: Image.network(
-                                      product.image ?? '',
-                                      width: 50,
-                                      height: 50,
-                                      fit: BoxFit.contain,
+                                    title: Text(
+                                      "Order #${order.orderNumber}",
+                                      style: TextStyle(fontWeight: FontWeight.bold),
                                     ),
-                                    title: Text(product.name ?? ''),
-                                    subtitle: Text(
-                                      "Qty: ${product.quantity} • ₹${product.price}",
+                                    subtitle: Text("Total: ₹${order.totalAmount}"),
+                                    trailing: Text(
+                                      "Date: ${_formatDate(order.createdAt)}",
+                                      style: TextStyle(fontSize: 15),
                                     ),
                                   );
-                                }).toList(),
+                                },
+                                body: Column(
+                                  children: order.product!.map((product) {
+                                    return ListTile(
+                                      leading: Image.network(
+                                        product.image ?? '',
+                                        width: 50,
+                                        height: 50,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      title: Text(product.name ?? '', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                                      subtitle: Text(
+                                        "Qty: ${product.quantity} • ₹${product.price}",
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                                isExpanded: _isExpanded[index],
                               ),
-                              isExpanded: _isExpanded[index],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             );
           } else if (state is OrderErrorState) {

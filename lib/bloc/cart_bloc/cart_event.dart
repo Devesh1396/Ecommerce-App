@@ -12,11 +12,20 @@ class LoadCartEvent extends CartEvent {
   LoadCartEvent({required this.token});
 }
 
+//Whole Cart
 class DeleteCartItemEvent extends CartEvent {
   final int cartId;
   final String token;
 
   DeleteCartItemEvent({required this.cartId, required this.token});
+}
+
+//Single Item
+class DeleteItemEvent extends CartEvent {
+  final int cartId;
+  final String token;
+
+  DeleteItemEvent({required this.cartId, required this.token});
 }
 
 class UpdateCartQtyEvent extends CartEvent {

@@ -12,10 +12,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc(this.apiService) : super(CartInitialState()) {
     on<AddToCartEvent>(_onAddToCart);
     on<LoadCartEvent>(_ViewCart);
-    on<DeleteCartItemEvent>(_deleteCartItem);
+    on<DeleteCartItemEvent>(_deleteCartAllItem);
     on<UpdateCartQtyEvent>(_onUpdateQty);
     on<DecrementCartQtyEvent>(_onDecrementQty);
     on<PlaceOrderEvent>(_onPlaceOrder);
+    on<DeleteItemEvent>(_deleteCartItem);
   }
 
   Future<void> _onAddToCart(AddToCartEvent event, Emitter<CartState> emit) async {
@@ -68,7 +69,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     }
   }
 
-  Future<void> _deleteCartItem(DeleteCartItemEvent event, Emitter<CartState> emit) async {
+  Future<void> _deleteCartAllItem(DeleteCartItemEvent event, Emitter<CartState> emit) async {
     emit(CartDeletingState());
     try {
       final response = await apiService.postAPI(
@@ -86,6 +87,47 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
     } catch (e) {
       emit(CartErrorState(error: e.toString()));
+    }
+  }
+
+  Future<void> _deleteCartItem(DeleteItemEvent event, Emitter<CartState> emit) async {
+    emit(CartItemDeletingState());
+    try {
+      final response = await apiService.postAPI(
+        url: Urls.delete_cart_URL,
+        token: event.token,
+        body: {
+          "cart_id": event.cartId,
+        },
+      );
+
+      if (response['status'] == true) {
+        final cartResponse = await apiService.getAPI(
+          url: Urls.view_cart_URL,
+          token: event.token,
+        );
+
+        if (cartResponse['status'] == true) {
+          // Parse the API response into the CartModel
+          final cart = CartModel.fromJson(cartResponse);
+
+          // Emit CartUpdatedState for UI-specific reactions (e.g., success messages)
+          emit(CartItemDeletedState(message: response['message'] ?? "Failed to Delete Product from Cart."));
+
+          // Emit CartLoadedState with the updated cart data to refresh the UI
+          emit(CartLoadedState(cart: cart));
+        } else if (cartResponse['status'] == false && cartResponse['data']==null)
+        {
+          emit(CartItemDeletedState(message: response['message'] ?? "Failed to Delete Product from Cart."));
+          emit(CartEmptyState());
+        } else {
+          emit(CartErrorState(error: "Failed to reload cart after deleting."));
+        }
+      } else {
+        emit(CartErrorState(error: response['message']));
+      }
+    } catch (e) {
+      emit(CartErrorState(error: "Failed to decrement quantity: $e"));
     }
   }
 

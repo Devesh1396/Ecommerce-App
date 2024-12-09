@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             initialRoute: '/',
             routes: {
-              '/': (context) => OrdersUI(),
+              '/': (context) => SplashUI(),
             },
           ),
         );

@@ -28,6 +28,14 @@ class CartDeletingState extends CartState {}
 
 class CartDeletedState extends CartState {}
 
+class CartItemDeletingState extends CartState {}
+
+class CartItemDeletedState extends CartState {
+  final String message;
+
+  CartItemDeletedState({required this.message});
+}
+
 class CartEmptyState extends CartState {}
 
 class CartUpdatingState extends CartState {}

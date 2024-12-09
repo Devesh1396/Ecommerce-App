@@ -1,4 +1,4 @@
-import 'package:ecom_app/HomeUI.dart';
+import 'package:ecom_app/OrdersUI.dart';
 import 'package:ecom_app/bloc/cart_bloc/cart_event.dart';
 import 'package:ecom_app/data/UserSession.dart';
 import 'package:flutter/material.dart';
@@ -130,7 +130,7 @@ class _CartUIState extends State<CartUI> {
               cartData = [];
               isLoading = false; // Data has been loaded
             });
-          } else if (state is CartUpdatingState || state is OrderPlacingState) {
+          } else if (state is CartUpdatingState || state is OrderPlacingState || state is CartItemDeletingState) {
             // Show overlay loader for updating state
             showDialog(
               context: context,
@@ -141,7 +141,7 @@ class _CartUIState extends State<CartUI> {
                 ),
               ),
             );
-          } else if (state is CartUpdatedState) {
+          } else if (state is CartUpdatedState || state is CartItemDeletedState) {
             // Dismiss loader after updating
             Navigator.pop(context);
           }
@@ -359,7 +359,7 @@ class _CartUIState extends State<CartUI> {
               // Remove Icon
               IconButton(
                 onPressed: () {
-                  // Handle delete individual item
+                  context.read<CartBloc>().add(DeleteItemEvent(cartId: item.id!, token: token!));
                 },
                 icon: Icon(Icons.close, color: Colors.grey),
               ),
@@ -554,7 +554,7 @@ class _CartUIState extends State<CartUI> {
       removeOverlay(); // Remove the overlay
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomeUI()), // Replace with your new UI
+        MaterialPageRoute(builder: (context) => OrdersUI()), // Replace with your new UI
       );
     });
   }

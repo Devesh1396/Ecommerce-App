@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ecom_app/MainProfileUI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -70,6 +71,10 @@ class _HomeUIState extends State<HomeUI> {
             icon: Icon(Icons.person, color: Colors.white),
             onPressed: () {
               // Navigate to profile or user settings
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => profileUI()),
+              );
             },
           ),
         ],

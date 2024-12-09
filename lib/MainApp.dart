@@ -2,6 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'CartUI.dart';
 import 'HomeUI.dart';
+import 'MainProfileUI.dart';
 import 'app_colors.dart';
 import 'package:badges/badges.dart' as badges;
 
@@ -24,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
       case 0:
         return HomeUI();
       case 1:
-        return HomeUI();
+        return profileUI(showBackButton: false);
       default:
         return HomeUI();
     }
