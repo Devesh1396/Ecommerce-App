@@ -1,4 +1,4 @@
-import 'package:ecom_app/HomeUI.dart';
+import 'package:ecom_app/MainApp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'app_colors.dart';
@@ -6,6 +6,7 @@ import 'bloc/user/bloc_code.dart';
 import 'bloc/user/events.dart';
 import 'bloc/user/states.dart';
 import 'customback_button.dart';
+import 'data/data_helper.dart';
 
 class SignUpUi extends StatefulWidget {
   @override
@@ -16,15 +17,17 @@ class _SignUpState extends State<SignUpUi> {
   final TextEditingController unameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
 
   void registerUser() {
     String username = unameController.text;
     String email = emailController.text;
     String password = passwordController.text;
+    String mobile = mobileController.text;
 
     // Dispatch the AddUserEvent to the UserBloc
     context.read<UserBloc>().add(
-      RegisterUserEvent(name: username, email: email, password: password, mobileNumber: password),
+      RegisterUserEvent(name: username, email: email, password: password, mobileNumber: mobile),
     );
   }
 
@@ -69,6 +72,12 @@ class _SignUpState extends State<SignUpUi> {
                     controller: passwordController,
                     hintText: "Enter Your Password",
                     obscureText: true,
+                  ),
+                  _buildTextFieldWithLabel(
+                    label: "Mobile Number",
+                    controller: passwordController,
+                    hintText: "Enter Your Mobile Number",
+                    keyboardType: TextInputType.number,
                   ),
                   SizedBox(height: screenHeight * 0.04),
                   _buildSignUpButton(context, screenWidth),
@@ -181,15 +190,10 @@ class _SignUpState extends State<SignUpUi> {
         if (state is UserLoadingState) {
           // Show loading indicator
         } else if (state is UserSessionLoadedState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Registration successful'),
-              backgroundColor: Colors.green,
-            ),
-          );
+          showToast("Registration Successful");
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomeUI()),
+            MaterialPageRoute(builder: (context) => MainScreen()),
           );
         } else if (state is UserErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(

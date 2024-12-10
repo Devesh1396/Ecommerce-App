@@ -1,5 +1,4 @@
-/*
-import 'package:expense_app/SignIn_Ui.dart';
+import 'package:ecom_app/SignIn_Ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,21 +15,21 @@ class _OnboardingUIState extends State<OnboardingUI> {
   int _currentIndex = 0;
 
   final List<Map<String, String>> onboardingData = [
-    {
-      'title': 'Welcome to SpendMate',
-      'description': 'Take Charge of Your Spending Effortlessly and Track Your Expenses',
-      'image': 'assets/images/onboard1.svg',
-    },
-    {
-      'title': 'Take Control of Your Finances',
-      'description': 'Track, Manage, and Analyze Your Expenses with Ease and like a Pro',
-      'image': 'assets/images/onboard2.svg',
-    },
-    {
-      'title': 'Your Data is Secure',
-      'description': 'Peace of Mind with Secure Data Protection, We Prioritize Your Privacy',
-      'image': 'assets/images/onboard3.svg',
-    },
+      {
+        'title': 'Welcome to Naya!',
+        'description': 'Your One-Stop Destination for Quality Products and Great Deals.',
+        'image': 'assets/images/onboard1.svg',
+      },
+      {
+        'title': 'Effortless Shopping Experience',
+        'description': 'Explore, Buy, and Track Orders Easily with Our Intuitive App.',
+        'image': 'assets/images/onboard2.svg',
+      },
+      {
+        'title': 'Join the Naya Family',
+        'description': 'Experience the Joy of Shopping with Personalized Recommendations.',
+        'image': 'assets/images/onboard3.svg',
+      },
   ];
 
   void _onNextPressed() async {
@@ -167,4 +166,3 @@ class OnboardingPage extends StatelessWidget {
     );
   }
 }
-*/

@@ -1,4 +1,4 @@
-import 'package:ecom_app/HomeUI.dart';
+import 'package:ecom_app/MainApp.dart';
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 import 'bloc/user/bloc_code.dart';
@@ -41,7 +41,7 @@ class SigninUi extends StatefulWidget {
         // Login successful
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomeUI()),
+          MaterialPageRoute(builder: (context) => MainScreen()),
         );
       } else if (state is UserErrorState) {
         // Show error message

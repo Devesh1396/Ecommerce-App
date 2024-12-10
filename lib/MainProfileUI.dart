@@ -1,6 +1,9 @@
 import 'package:ecom_app/OrdersUI.dart';
 import 'package:ecom_app/SettingsUI.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'bloc/user/bloc_code.dart';
+import 'bloc/user/events.dart';
 import 'data/UserSession.dart';
 
 class profileUI extends StatefulWidget {
@@ -187,9 +190,7 @@ class _ProfileUIState extends State<profileUI> {
         _buildDivider(),
         _buildMenuItem(Icons.support, "Support", () {}),
         _buildDivider(),
-        _buildMenuItem(Icons.logout, "Logout", () {
-          //
-        }),
+        _buildMenuItem(Icons.logout, "Logout", () => context.read<UserBloc>().add(UserLogoutEvent())),
         _buildDivider(),
         _buildMenuItem(Icons.info_outline, "App Info", () {}),
       ],

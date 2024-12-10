@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ecom_app/MainProfileUI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'ProductGridItem.dart';
 import 'app_colors.dart';
 import 'bloc/cart_bloc/cart_bloc.dart';
@@ -12,6 +11,7 @@ import 'bloc/product_bloc/product_bloc.dart';
 import 'bloc/product_bloc/product_event.dart';
 import 'bloc/product_bloc/product_state.dart';
 import 'data/DataModel.dart';
+import 'data/data_helper.dart';
 
 class HomeUI extends StatefulWidget {
   @override
@@ -48,16 +48,6 @@ class _HomeUIState extends State<HomeUI> {
       _loadingProductId = productId; // Set the loading product ID
     });
     context.read<CartBloc>().add(AddToCartEvent(productId: productId));
-  }
-
-  void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-    );
   }
 
   @override
@@ -192,8 +182,8 @@ class _HomeUIState extends State<HomeUI> {
         if (state is CartSuccessState) {
           setState(() {
             _loadingProductId = null;
+            cartItemCountNotifier.value += 1;
           });
-          showToast("Product Added to Cart");
         } else if (state is CartErrorState) {
           setState(() {
             _loadingProductId = null;

@@ -9,6 +9,7 @@ import 'app_colors.dart';
 import 'bloc/cart_bloc/cart_bloc.dart';
 import 'bloc/cart_bloc/cart_state.dart';
 import 'data/DataModel.dart';
+import 'data/data_helper.dart';
 
 class CartUI extends StatefulWidget {
   const CartUI({Key? key}) : super(key: key);
@@ -123,9 +124,11 @@ class _CartUIState extends State<CartUI> {
             setState(() {
               cartData = state.cart.data ?? [];
               isLoading = false; // Data has been loaded
+              updateCartItemCount(cartData);
             });
           } else if (state is CartDeletedState || state is CartEmptyState) {
             // Clear cart data when cart is empty
+            updateCartItemCount([]);
             setState(() {
               cartData = [];
               isLoading = false; // Data has been loaded
@@ -369,7 +372,7 @@ class _CartUIState extends State<CartUI> {
     );
   }
 
-  Widget _buildLoadingOverlay() {
+  /*Widget _buildLoadingOverlay() {
     return Stack(
       children: [
         // Dimmed background
@@ -390,7 +393,7 @@ class _CartUIState extends State<CartUI> {
         ),
       ],
     );
-  }
+  }*/
 
   void showQuantityBottomSheet(BuildContext context, Function(int) onQuantitySelected) {
     int selectedQuantity = 1; // Default selected quantity
@@ -502,8 +505,6 @@ class _CartUIState extends State<CartUI> {
 
   void _showLottieOverlay(BuildContext context) {
     final overlayState = Overlay.of(context); // Get the overlay state
-    if (overlayState == null) return;
-
     late OverlayEntry overlayEntry;
 
     // Function to remove the overlay
@@ -786,7 +787,7 @@ class PlaceOrderWidget extends StatelessWidget {
   // Helper method to build a price detail row
   Widget _buildPriceRow(String title, String value, BuildContext context, {Color? valueColor, String? actionText}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

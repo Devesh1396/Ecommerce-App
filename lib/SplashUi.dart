@@ -3,6 +3,7 @@ import 'package:ecom_app/MainApp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'Onboard_Ui.dart';
 import 'SignIn_Ui.dart';
 import 'bloc/user/bloc_code.dart';
 import 'bloc/user/events.dart';
@@ -56,13 +57,11 @@ class _SplashScreenState extends State<SplashUI> with SingleTickerProviderStateM
       body: BlocListener<UserBloc, UserState>(
         listener: (context, state) {
           if (_hasNavigated) return;
-          /*
           if (state is OnboardingNotSeenState) {
             _hasNavigated = true;
             print('Navigating to Onboarding');
             _navigateTo(context, OnboardingUI());
-          } else
-            */if (state is UserSessionLoadedState) {
+          } else if (state is UserSessionLoadedState) {
             _hasNavigated = true;
             print('Navigating to Home');
             UserSession().loadUserSession(state);

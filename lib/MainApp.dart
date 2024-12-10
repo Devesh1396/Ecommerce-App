@@ -6,6 +6,8 @@ import 'MainProfileUI.dart';
 import 'app_colors.dart';
 import 'package:badges/badges.dart' as badges;
 
+import 'data/data_helper.dart';
+
 class MainScreen extends StatefulWidget {
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -51,18 +53,23 @@ class _MainScreenState extends State<MainScreen> {
         child: Stack(
           clipBehavior: Clip.none, // Ensure the badge is not clipped
           children: [
-            badges.Badge(
-              child: Icon(Icons.shopping_cart, color: Colors.white, size: 24),
-              position: badges.BadgePosition.topEnd(top: -15, end: -10),
-              badgeContent: Text(
-                '5', // Replace with dynamic count
-                style: TextStyle(color: Colors.white, fontSize: 15),
-              ),
-              badgeStyle: badges.BadgeStyle(
-                badgeColor: Colors.black,
-                elevation: 0, // Remove shadow
-                padding: EdgeInsets.all(6),
-              ),
+    ValueListenableBuilder<num>(
+    valueListenable: getCartItemCountNotifier(),
+    builder: (context, count, child) {
+      return badges.Badge(
+        child: Icon(Icons.shopping_cart, color: Colors.white, size: 24),
+        position: badges.BadgePosition.topEnd(top: -15, end: -10),
+        badgeContent: Text(
+          count.toString(),
+          style: TextStyle(color: Colors.white, fontSize: 15),
+        ),
+        badgeStyle: badges.BadgeStyle(
+          badgeColor: Colors.black,
+          elevation: 0, // Remove shadow
+          padding: EdgeInsets.all(6),
+        ),
+      );
+    }
             ),
           ],
         ),
