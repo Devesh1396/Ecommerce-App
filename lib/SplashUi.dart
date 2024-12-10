@@ -53,7 +53,6 @@ class _SplashScreenState extends State<SplashUI> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: BlocListener<UserBloc, UserState>(
         listener: (context, state) {
           if (_hasNavigated) return;

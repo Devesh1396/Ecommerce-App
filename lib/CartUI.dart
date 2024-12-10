@@ -204,14 +204,14 @@ class _CartUIState extends State<CartUI> {
       bottomNavigationBar: cartData.isEmpty
           ? SizedBox.shrink() // Hide the button when cart is empty
           : Container(
-        color: Colors.white, // Add background color here
+        color: Theme.of(context).cardColor, // Add background color here
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
             _placeOrder(context);
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: AppColors.primaryColor,
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
@@ -276,7 +276,7 @@ class _CartUIState extends State<CartUI> {
       child: Card(
         elevation: 1,
         margin: const EdgeInsets.symmetric(vertical: 6),
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(0),
         ),
@@ -347,10 +347,9 @@ class _CartUIState extends State<CartUI> {
                     // Price
                     Text(
                       "₹${(int.parse(item.price ?? '0') * (item.quantity ?? 1)).toString()}",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
@@ -516,7 +515,7 @@ class _CartUIState extends State<CartUI> {
     overlayEntry = OverlayEntry(
       builder: (context) {
         return Container(
-          color: Colors.white, // Full-screen white background
+          color:  Theme.of(context).cardColor, // Full-screen white background
           child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -532,13 +531,10 @@ class _CartUIState extends State<CartUI> {
                 // Thank You Text
                 Text(
                   "Thank you for your order!",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    )),
               ],
             ),
           ),
@@ -577,7 +573,6 @@ class _CouponWidgetState extends State<CouponWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[100], // Light background for the coupon section
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -614,10 +609,10 @@ class _CouponWidgetState extends State<CouponWidget> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color:  Theme.of(context).shadowColor,
                   blurRadius: 4,
                   offset: Offset(0, 2),
                 ),
@@ -639,10 +634,9 @@ class _CouponWidgetState extends State<CouponWidget> {
                 // Second Row: Subtext
                 Text(
                   "For Your First Order off NAYA",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      fontSize: 14,
+                    ) // Increased font size
                 ),
                 const SizedBox(height: 16),
 
@@ -659,6 +653,9 @@ class _CouponWidgetState extends State<CouponWidget> {
                           height: 60, // Adjust height as per design
                           width: 80, // Adjust width as per design
                           fit: BoxFit.contain,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : null, // Use white for dark themes, or no color for default
                         ),
                         Text(
                           "TRYNAYA",
@@ -678,7 +675,9 @@ class _CouponWidgetState extends State<CouponWidget> {
                         widget.onToggleCoupon(!widget.isCouponApplied);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.black
+                            : Colors.white, // Black for dark theme, white for light theme
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4.0),
                           side: BorderSide(
@@ -731,7 +730,7 @@ class PlaceOrderWidget extends StatelessWidget {
     final double totalAmount = itemsTotal - couponDiscount + platformFee + shippingFee;
 
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).cardColor,
       margin: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -751,11 +750,11 @@ class PlaceOrderWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Column(
               children: [
-                _buildPriceRow("Item(s) Total", "₹${itemsTotal.toStringAsFixed(2)}"),
-                _buildPriceRow("Coupon Discount", "- ₹${couponDiscount.toStringAsFixed(2)}"),
-                _buildPriceRow("Platform Fee", "₹${platformFee.toStringAsFixed(2)}",
+                _buildPriceRow("Item(s) Total", "₹${itemsTotal.toStringAsFixed(2)}", context),
+                _buildPriceRow("Coupon Discount", "- ₹${couponDiscount.toStringAsFixed(2)}", context),
+                _buildPriceRow("Platform Fee", "₹${platformFee.toStringAsFixed(2)}", context,
                     actionText: "Know More"),
-                _buildPriceRow("Shipping Fee", shippingFee == 0.0 ? "FREE" : "₹${shippingFee.toStringAsFixed(2)}",
+                _buildPriceRow("Shipping Fee", shippingFee == 0.0 ? "FREE" : "₹${shippingFee.toStringAsFixed(2)}", context,
                     valueColor: shippingFee == 0.0 ? Colors.green : null, actionText: "Know More"),
               ],
             ),
@@ -785,7 +784,7 @@ class PlaceOrderWidget extends StatelessWidget {
   }
 
   // Helper method to build a price detail row
-  Widget _buildPriceRow(String title, String value, {Color? valueColor, String? actionText}) {
+  Widget _buildPriceRow(String title, String value, BuildContext context, {Color? valueColor, String? actionText}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
@@ -810,7 +809,10 @@ class PlaceOrderWidget extends StatelessWidget {
           ),
           Text(
             value,
-            style: TextStyle(fontSize: 14, color: valueColor ?? Colors.black),
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              fontSize: 14,
+              color: valueColor ?? Theme.of(context).textTheme.labelSmall?.color,
+            ),
           ),
         ],
       ),

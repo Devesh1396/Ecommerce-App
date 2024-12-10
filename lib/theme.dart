@@ -10,15 +10,6 @@ class AppTheme {
     primaryColor,
   );
 
-  // Theme-adaptive colors
-  static Color incomeColor(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.light ? Colors.green : Colors.greenAccent;
-
-  static Color expenseColor(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.light ? Colors.red : Colors.redAccent;
-
-  static Color datePickerColor(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white70;
 
   // Common colors for both themes
   static const Color iconColor = Colors.black;
@@ -47,7 +38,7 @@ class AppTheme {
     textTheme: TextTheme(
       bodySmall: TextStyle(color: textSecondaryColor),
       bodyMedium: TextStyle(color: textPrimaryColor),
-      labelSmall: TextStyle(color: primaryColor),
+      labelSmall: TextStyle(color: Colors.grey[700]),
       labelMedium: TextStyle(color: Colors.white),
     ),
     cardColor: containerColor,

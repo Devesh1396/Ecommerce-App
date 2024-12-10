@@ -63,12 +63,11 @@ class _HomeUIState extends State<HomeUI> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: _buildSearchBar(),
         actions: [
           IconButton(
-            icon: Icon(Icons.person, color: Colors.white),
+            icon: Icon(Icons.person),
             onPressed: () {
               // Navigate to profile or user settings
               Navigator.push(
@@ -91,10 +90,10 @@ class _HomeUIState extends State<HomeUI> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 "Trending Products",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  )
               ),
             ),
             BlocBuilder<ProductBloc, ProductState>(
@@ -122,7 +121,7 @@ class _HomeUIState extends State<HomeUI> {
     return Container(
       height: 40,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color:  Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
@@ -176,10 +175,7 @@ class _HomeUIState extends State<HomeUI> {
                 margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: (Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : AppColors.primaryColor)
-                      .withOpacity(_currentIndex == entry.key ? 0.9 : 0.4),
+                  color: AppColors.primaryColor.withOpacity(_currentIndex == entry.key ? 0.9 : 0.4),
                 ),
               ),
             );

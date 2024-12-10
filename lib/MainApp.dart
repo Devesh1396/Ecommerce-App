@@ -37,7 +37,6 @@ class _MainScreenState extends State<MainScreen> {
       extendBody: true, // Extend the body behind the navigation bar
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
       body: _getSelectedPage(_currentIndex), // Display selected page
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
@@ -81,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
         },
         activeColor: AppColors.primaryColor, // Active icon color
         inactiveColor: Colors.grey, // Inactive icon color
-        backgroundColor: Colors.white, // Background color of the bar
+        backgroundColor: Theme.of(context).cardColor, // Background color of the bar
       ),
     );
   }
