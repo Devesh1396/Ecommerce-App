@@ -73,9 +73,10 @@ class _SignUpState extends State<SignUpUi> {
                     hintText: "Enter Your Password",
                     obscureText: true,
                   ),
+                  SizedBox(height: screenHeight * 0.02),
                   _buildTextFieldWithLabel(
                     label: "Mobile Number",
-                    controller: passwordController,
+                    controller: mobileController,
                     hintText: "Enter Your Mobile Number",
                     keyboardType: TextInputType.number,
                   ),

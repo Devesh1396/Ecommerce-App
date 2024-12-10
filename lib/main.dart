@@ -1,5 +1,6 @@
 import 'package:ecom_app/OrdersUI.dart';
 import 'package:ecom_app/SignIn_Ui.dart';
+import 'package:ecom_app/SignUp_Ui.dart';
 import 'package:ecom_app/SplashUi.dart';
 import 'package:ecom_app/bloc/orders_bloc/order_bloc.dart';
 import 'package:ecom_app/remote_api/api_helper.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
             initialRoute: '/',
             routes: {
               '/': (context) => SplashUI(),
+              '/signUp': (context) => SignUpUi(),
             },
           ),
         );

@@ -149,6 +149,7 @@ class _CartUIState extends State<CartUI> {
             Navigator.pop(context);
           }
           else if (state is OrderPlacedState) {
+            updateCartItemCount([]);
             Navigator.pop(context); // Dismiss the loader
             _showLottieOverlay(context); // Show Lottie animation
         } else if (state is CartErrorState) {

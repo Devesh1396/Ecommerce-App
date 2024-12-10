@@ -36,6 +36,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         print("registration done");
         // Save session
         await UserSession().saveTokenToPrefs(token);
+        await UserSession().saveNameToPrefs(username);
         UserSession().loadUserSession(
           UserSessionLoadedState(token: token, username: username),
         );
@@ -125,7 +126,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   Future<void> _onCheckOnboarding(CheckOnboardingEvent event, Emitter<UserState> emit) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool hasSeenOnboarding = prefs.getBool('hasSeenOnboarding') ?? true;
+    bool hasSeenOnboarding = prefs.getBool('hasSeenOnboarding') ?? false;
     print('Has seen onboarding: $hasSeenOnboarding');
 
     if (!hasSeenOnboarding) {
